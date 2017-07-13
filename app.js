@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const expressLayouts     = require('express-ejs-layouts');
 const index = require('./routes/index');
 
+
 const app = express();
 
 const mongoose = require('mongoose');
