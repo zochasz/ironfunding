@@ -19,6 +19,9 @@ router.get('/signup', (req, res, next) => {
 router.post("/signup", (req, res, next) => {
   const username = req.body.username;
   const password = req.body.password;
+  const email = req.body.email;
+  const description = req.body.description;
+  const imgurl = req.body.imgurl;
 
   if (username === "" || password === "") {
     res.render("auth/signup", {
@@ -42,7 +45,11 @@ router.post("/signup", (req, res, next) => {
 
       new User({
         username: username,
-        password: hashPass
+        password: hashPass,
+        email: email,
+        description: description,
+        imgurl: imgurl
+
       }).save((err) => {
         if (err) {
           res.render("auth/signup", {
@@ -56,32 +63,28 @@ router.post("/signup", (req, res, next) => {
 });
 
 router.get("/login", (req, res, next) => {
-  res.render("auth/login"), { "message": req.flash("error") };
+  res.render("auth/login", { "message": req.flash("error") });
 });
 
-router.post("/login", passport.authenticate("local", {
-  successRedirect: "/private-page",
+router.post("/login", passport.authenticate("local-login", {
+  successRedirect: "/",
   failureRedirect: "/login",
   failureFlash: true,
   passReqToCallback: true
 }));
-
-
-router.get("/private-page", (req, res) => {
-  res.redirect("     ");
-});
-
-
-router.get("/logout", (req, res, next) => {
-  if (!req.session.currentUser) { res.redirect("/"); return; }
-
-  req.session.destroy((err) => {
-    if (err) {
-      console.log (err);
-    } else {
-      res.redirect ("/index");
-    }
-  });
-});
+//
+//
+//
+// router.get("/logout", (req, res, next) => {
+//   if (!req.session.currentUser) { res.redirect("/"); return; }
+//
+//   req.session.destroy((err) => {
+//     if (err) {
+//       console.log (err);
+//     } else {
+//       res.redirect ("/index");
+//     }
+//   });
+// });
 
 module.exports = router;

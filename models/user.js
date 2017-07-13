@@ -5,7 +5,7 @@ const UserSchema = new Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  imgurl: { type: String, default: DEFAULT_IMG_URL },
+  imgurl: { type: String, default: "https://placeholdit.imgix.net/~text?txtsize=33&txt=250%C3%97250&w=250&h=250" },
   description: String
 });
 
