@@ -16,51 +16,56 @@ router.get('/signup', (req, res, next) => {
   res.render('auth/signup');
 });
 
-router.post("/signup", (req, res, next) => {
-  const username = req.body.username;
-  const password = req.body.password;
-  const email = req.body.email;
-  const description = req.body.description;
-  const imgurl = req.body.imgurl;
+router.post('/signup', passport.authenticate('local-signup', {
+  successRedirect : '/',
+  failureRedirect : '/signup'
+}));
 
-  if (username === "" || password === "") {
-    res.render("auth/signup", {
-      errorMessage: "Indicate a username and a password to sign up"
-    });
-    return;
-  }
-
-  User.findOne({ "username": username },
-    "username",
-    (err, user) => {
-      if (user !== null) {
-        res.render("auth/signup", {
-          errorMessage: "The username already exists"
-        });
-        return;
-      }
-
-      const salt = bcrypt.genSaltSync(bcryptSalt);
-      const hashPass = bcrypt.hashSync(password, salt);
-
-      new User({
-        username: username,
-        password: hashPass,
-        email: email,
-        description: description,
-        imgurl: imgurl
-
-      }).save((err) => {
-        if (err) {
-          res.render("auth/signup", {
-            errorMessage: "Something went wrong"
-          });
-        } else {
-          res.redirect("/login");
-        }
-      });
-    })
-});
+// router.post("/signup", (req, res, next) => {
+//   const username = req.body.username;
+//   const password = req.body.password;
+//   const email = req.body.email;
+//   const description = req.body.description;
+//   const imgurl = req.body.imgurl;
+//
+//   if (username === "" || password === "") {
+//     res.render("auth/signup", {
+//       errorMessage: "Indicate a username and a password to sign up"
+//     });
+//     return;
+//   }
+//
+//   User.findOne({ "username": username },
+//     "username",
+//     (err, user) => {
+//       if (user !== null) {
+//         res.render("auth/signup", {
+//           errorMessage: "The username already exists"
+//         });
+//         return;
+//       }
+//
+//       const salt = bcrypt.genSaltSync(bcryptSalt);
+//       const hashPass = bcrypt.hashSync(password, salt);
+//
+//       new User({
+//         username: username,
+//         password: hashPass,
+//         email: email,
+//         description: description,
+//         imgurl: imgurl
+//
+//       }).save((err) => {
+//         if (err) {
+//           res.render("auth/signup", {
+//             errorMessage: "Something went wrong"
+//           });
+//         } else {
+//           res.redirect("/login");
+//         }
+//       });
+//     })
+// });
 
 router.get("/login", (req, res, next) => {
   res.render("auth/login", { "message": req.flash("error") });
